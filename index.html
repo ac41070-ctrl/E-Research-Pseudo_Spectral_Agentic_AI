@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quantum Wavepacket Lab</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="simulation-panel" aria-label="Quantum simulation workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Split-Step Fourier TDSE</p>
+            <h1>Quantum Wavepacket Lab</h1>
+          </div>
+          <div class="run-controls">
+            <button id="resetBtn" class="icon-btn" type="button" title="Reset simulation" aria-label="Reset simulation">R</button>
+            <button id="playBtn" class="primary-btn" type="button">Pause</button>
+          </div>
+        </header>
+
+        <div class="mode-tabs" role="tablist" aria-label="Simulation mode">
+          <button class="mode-tab active" data-mode="harmonic" type="button">Harmonic trap</button>
+          <button class="mode-tab" data-mode="tunnel" type="button">Quantum tunneling</button>
+          <button class="mode-tab" data-mode="free" type="button">Free packet</button>
+        </div>
+
+        <section class="output-strip" aria-label="Live simulation outputs">
+          <div><span>t</span><strong id="stripTime">0.000</strong></div>
+          <div><span>Norm</span><strong id="stripNorm">1.0000</strong></div>
+          <div><span>E</span><strong id="stripEnergy">0.000</strong></div>
+          <div><span>&lt;x&gt;</span><strong id="stripMeanX">0.000</strong></div>
+          <div><span>&lt;p&gt;</span><strong id="stripMeanP">0.000</strong></div>
+          <div><span>Δx</span><strong id="stripWidth">0.000</strong></div>
+        </section>
+
+        <div class="canvas-stack">
+          <canvas id="waveCanvas" width="1100" height="520" aria-label="Time varying wavefunction psi of x"></canvas>
+          <div class="legend-row">
+            <span><i class="swatch real"></i>Re psi(x)</span>
+            <span><i class="swatch imaginary"></i>Im psi(x)</span>
+            <span><i class="swatch modulus"></i>|psi(x)|</span>
+            <span><i class="swatch potential"></i>V(x)/Vmax</span>
+          </div>
+        </div>
+
+        <div class="compact-plot-row">
+          <article class="compact-plot">
+            <div class="plot-title">Probability Density |psi(x)|^2</div>
+            <canvas id="probabilityCanvas" width="540" height="190" aria-label="Probability density plot"></canvas>
+          </article>
+          <article class="compact-plot">
+            <div class="plot-title">Energy vs Position</div>
+            <canvas id="energyPositionCanvas" width="540" height="190" aria-label="Energy versus position plot"></canvas>
+          </article>
+        </div>
+      </section>
+
+      <aside class="control-panel" aria-label="Simulation controls">
+        <section class="panel-section">
+          <h2>Experiment</h2>
+          <div id="scenarioText" class="scenario-text"></div>
+        </section>
+
+        <section class="panel-section">
+          <h2>Wavepacket</h2>
+          <label>
+            <span>Initial position</span>
+            <input id="x0" type="range" min="-80" max="80" step="1" value="-25" />
+            <output id="x0Out">-25</output>
+          </label>
+          <label>
+            <span>Momentum k₀</span>
+            <input id="k0" type="range" min="-4" max="4" step="0.1" value="0" />
+            <output id="k0Out">0</output>
+          </label>
+          <label>
+            <span>Width σ</span>
+            <input id="sigma" type="range" min="1" max="20" step="0.5" value="3" />
+            <output id="sigmaOut">3</output>
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <h2>Potential</h2>
+          <label id="omegaRow">
+            <span>Trap strength ω</span>
+            <input id="omega" type="range" min="0.02" max="0.3" step="0.01" value="0.16" />
+            <output id="omegaOut">0.16</output>
+          </label>
+          <label id="barrierHeightRow">
+            <span>Barrier height</span>
+            <input id="barrierHeight" type="range" min="0.2" max="8" step="0.1" value="2.3" />
+            <output id="barrierHeightOut">2.3</output>
+          </label>
+          <label id="barrierWidthRow">
+            <span>Barrier width</span>
+            <input id="barrierWidth" type="range" min="1" max="30" step="0.5" value="3" />
+            <output id="barrierWidthOut">3</output>
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <h2>Numerics</h2>
+          <label>
+            <span>Time step Δt</span>
+            <input id="dt" type="range" min="0.002" max="0.04" step="0.001" value="0.012" />
+            <output id="dtOut">0.012</output>
+          </label>
+          <label>
+            <span>Speed</span>
+            <input id="speed" type="range" min="1" max="10" step="1" value="4" />
+            <output id="speedOut">4x</output>
+          </label>
+        </section>
+
+        <section class="panel-section diagnostics">
+          <h2>Diagnostics</h2>
+          <dl>
+            <div><dt>t</dt><dd id="timeReadout">0.000</dd></div>
+            <div><dt>Norm</dt><dd id="normReadout">1.0000</dd></div>
+            <div><dt>Energy</dt><dd id="energyReadout">0.000</dd></div>
+            <div><dt>&lt;x&gt;</dt><dd id="meanXReadout">0.000</dd></div>
+            <div><dt>&lt;p&gt;</dt><dd id="meanPReadout">0.000</dd></div>
+            <div><dt>Δx</dt><dd id="widthReadout">0.000</dd></div>
+            <div><dt>Alert</dt><dd id="alertReadout">Stable</dd></div>
+          </dl>
+        </section>
+      </aside>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
